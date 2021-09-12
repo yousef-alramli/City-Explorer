@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import CityForm from './component/CityForm'
 import Locations from './component/Locations';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +26,7 @@ class App extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}`);
+    
     let config = {
       method: "get",
       baseURL: `https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`
@@ -36,7 +39,9 @@ class App extends Component {
       })
     })
   }
+
   render() {
+    console.log(this.state.lat);
     return (
       <div>
 
@@ -44,14 +49,17 @@ class App extends Component {
           handleCity={this.handleCity}
           handleSubmit={this.handleSubmit}
         />
+
         {
           this.state.showLocation &&
           <Locations
+          imgUrl={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=14&size=400x400&format=png&maptype=<MapType>&markers=icon:<icon>|<latitude>,<longitude>&markers=icon:<icon>|<latitude>,<longitude>`}
             city_name={this.state.city_name}
             lon={this.state.lon}
             lat={this.state.lat}
           />
         }
+        
       </div>
     )
   }
