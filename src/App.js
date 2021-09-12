@@ -4,6 +4,7 @@ import Locations from './component/Locations';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
+import AlertComponent from './component/AlertComponent';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class App extends Component {
       city_name: '',
       lat: "",
       lon: '',
-      showLocation: false
+      showLocation: false,
+      showAlert : false
 
     }
   }
@@ -24,6 +26,14 @@ class App extends Component {
       city_name: city_name,
     })
   }
+
+  handleAlert = () => {
+    this.setState({
+      showAlert: true,
+    })
+  }
+  
+  
   handleSubmit = (e) => {
     e.preventDefault()
     
@@ -37,11 +47,11 @@ class App extends Component {
         lon: receive.data[0].lon,
         showLocation: true
       })
-    })
+    }).catch(this.handleAlert)
   }
 
   render() {
-    console.log(this.state.lat);
+    console.log(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}`);
     return (
       <div>
 
@@ -49,7 +59,12 @@ class App extends Component {
           handleCity={this.handleCity}
           handleSubmit={this.handleSubmit}
         />
-
+{
+  this.state.showAlert &&
+<AlertComponent
+// showAlert = {this.state.showAlert}
+/>
+}
         {
           this.state.showLocation &&
           <Locations
