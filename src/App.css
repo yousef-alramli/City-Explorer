@@ -23,7 +23,27 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+.card{
+  width: 40%;
+  margin-top: 100px;
+  margin-left:30% ;
+}
+form{
+margin-left: 36%;
+margin-top: 25px;
+}
+input{
+  background-color: rgb(117, 10, 10);
+  margin: 10px;
+  height: 40px;
+  color: azure;
+  border: none;
+  border-radius: 3px;
+}
+input:hover{
+  border-radius: 18px;
+  transition-duration: .5s;
+}
 .App-link {
   color: #61dafb;
 }
@@ -36,3 +56,4 @@
     transform: rotate(360deg);
   }
 }
+
