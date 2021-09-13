@@ -5,7 +5,8 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import AlertComponent from './component/AlertComponent';
-
+import Weather from './component/Weather';
+import AlertWeather from './AlertWeather';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,8 +16,9 @@ class App extends Component {
       lat: "",
       lon: '',
       showLocation: false,
-      showAlert : false
-
+      showAlert: false,
+      cityWeather: [],
+      weatherAlert:false
     }
   }
   handleCity = (e) => {
@@ -27,16 +29,22 @@ class App extends Component {
     })
   }
 
-  handleAlert = () => {
+  handleMapAlert = () => {
     this.setState({
       showAlert: true,
+      showLocation:false
     })
   }
-  
-  
+  handleWeatherAlert = () => {
+    this.setState({
+      weatherAlert: true,
+    })
+  }
+
+
   handleSubmit = (e) => {
     e.preventDefault()
-    
+
     let config = {
       method: "get",
       baseURL: `https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city_name}`
@@ -47,11 +55,21 @@ class App extends Component {
         lon: receive.data[0].lon,
         showLocation: true
       })
-    }).catch(this.handleAlert)
+    }).catch(this.handleMapAlert)
+      .then(() => {
+        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weatherData?lon=${this.state.lon}&lat=${this.state.lat}`).then(res => {
+          this.setState({
+            cityWeather: res.data 
+          })
+        }).catch(this.handleWeatherAlert)
+
+
+      })
+
   }
 
   render() {
-    console.log(`${process.env.REACT_APP_LOCATIONIQ_API_KEY}`);
+    console.log(this.state.cityWeather);
     return (
       <div>
 
@@ -59,22 +77,31 @@ class App extends Component {
           handleCity={this.handleCity}
           handleSubmit={this.handleSubmit}
         />
-{
-  this.state.showAlert &&
-<AlertComponent
-// showAlert = {this.state.showAlert}
-/>
-}
         {
-          this.state.showLocation &&
-          <Locations
-          imgUrl={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=14&size=400x400&format=png&maptype=<MapType>&markers=icon:<icon>|<latitude>,<longitude>&markers=icon:<icon>|<latitude>,<longitude>`}
-            city_name={this.state.city_name}
-            lon={this.state.lon}
-            lat={this.state.lat}
+          this.state.showAlert &&
+          <AlertComponent
           />
         }
         
+        {
+          this.state.showLocation &&
+          <>
+            <Locations
+              imgUrl={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=14&size=400x400&format=png&maptype=<MapType>&markers=icon:<icon>|<latitude>,<longitude>&markers=icon:<icon>|<latitude>,<longitude>`}
+              city_name={this.state.city_name}
+              lon={this.state.lon}
+              lat={this.state.lat}
+            />
+            <Weather cityWeather={this.state.cityWeather} />
+          </>
+        }
+        {
+          this.state.weatherAlert &&
+          <AlertWeather
+          />
+        }
+
+
       </div>
     )
   }
