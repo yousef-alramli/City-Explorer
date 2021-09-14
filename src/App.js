@@ -57,7 +57,8 @@ class App extends Component {
       })
     }).catch(this.handleMapAlert)
       .then(() => {
-        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weatherData?lon=${this.state.lon}&lat=${this.state.lat}`).then(res => {
+        let city_name = this.state.city_name.toLocaleLowerCase();
+        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weatherData?lon=${this.state.lon}&lat=${this.state.lat}&searchQuery=${city_name}`).then(res => {
           this.setState({
             cityWeather: res.data 
           })
