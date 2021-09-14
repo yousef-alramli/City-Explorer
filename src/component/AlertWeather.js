@@ -7,7 +7,7 @@ export class AlertWeather extends Component {
                 <Alert variant="danger">
                     <Alert.Heading>Error 500</Alert.Heading>
                     <p>
-                        We support weather for Amman, Seattle and Paris
+                        Location not found
                     </p>
                 </Alert>
             </div>
