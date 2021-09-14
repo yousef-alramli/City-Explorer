@@ -58,9 +58,24 @@ input:hover{
 }
 
 .list-group-item{
+  margin: 0px;
 }
 .list-group{
   margin-left: 25%;
-  width: 50%;
+  width: 100%;
+  margin: 0px;
 
+
+}
+.spans1{
+  display: block;
+  float: right;
+  width: 45%;
+  border-left: 9px solid rgb(109 173 247);
+  background-color: rgb(234, 253, 255);
+}
+.spans2{
+  display: block;
+  width: 55%;
+  background-color: rgb(234, 253, 255);
 }

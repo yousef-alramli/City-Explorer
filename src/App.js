@@ -5,8 +5,8 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import AlertComponent from './component/AlertComponent';
-import Weather from './component/Weather';
-import AlertWeather from './AlertWeather';
+import WeatherAndMovies from './component/WeatherAndMovies';
+import AlertWeather from './component/AlertWeather';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +18,8 @@ class App extends Component {
       showLocation: false,
       showAlert: false,
       cityWeather: [],
-      weatherAlert:false
+      weatherAlert: false,
+      cityMovie: []
     }
   }
   handleCity = (e) => {
@@ -32,7 +33,7 @@ class App extends Component {
   handleMapAlert = () => {
     this.setState({
       showAlert: true,
-      showLocation:false
+      showLocation: false
     })
   }
   handleWeatherAlert = () => {
@@ -60,17 +61,21 @@ class App extends Component {
         let city_name = this.state.city_name.toLocaleLowerCase();
         axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/weatherData?lon=${this.state.lon}&lat=${this.state.lat}&searchQuery=${city_name}`).then(res => {
           this.setState({
-            cityWeather: res.data 
+            cityWeather: res.data
           })
         }).catch(this.handleWeatherAlert)
-
+        axios.get(`http://${process.env.REACT_APP_BACKEND_URL}/movies?query=${city_name}`).then((res) => {
+          this.setState({
+            cityMovie: res.data
+          })
+        })
 
       })
 
   }
 
   render() {
-    console.log(this.state.cityWeather);
+    console.log(this.state.cityMovie);
     return (
       <div>
 
@@ -83,7 +88,7 @@ class App extends Component {
           <AlertComponent
           />
         }
-        
+
         {
           this.state.showLocation &&
           <>
@@ -93,7 +98,10 @@ class App extends Component {
               lon={this.state.lon}
               lat={this.state.lat}
             />
-            <Weather cityWeather={this.state.cityWeather} />
+            <WeatherAndMovies
+              cityWeather={this.state.cityWeather}
+              cityMovie={this.state.cityMovie} 
+              />
           </>
         }
         {
