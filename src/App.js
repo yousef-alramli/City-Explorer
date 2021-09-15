@@ -5,7 +5,8 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import AlertComponent from './component/AlertComponent';
-import WeatherAndMovies from './component/WeatherAndMovies';
+import Weather from './component/Weather';
+import Movies from './component/Movies';
 import AlertWeather from './component/AlertWeather';
 class App extends Component {
   constructor(props) {
@@ -42,7 +43,6 @@ class App extends Component {
     })
   }
 
-
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -69,7 +69,6 @@ class App extends Component {
             cityMovie: res.data
           })
         })
-
       })
 
   }
@@ -98,10 +97,8 @@ class App extends Component {
               lon={this.state.lon}
               lat={this.state.lat}
             />
-            <WeatherAndMovies
-              cityWeather={this.state.cityWeather}
-              cityMovie={this.state.cityMovie} 
-              />
+            <Weather cityWeather={this.state.cityWeather} />
+            <Movies cityMovie={this.state.cityMovie} />
           </>
         }
         {
